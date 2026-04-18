@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATP DGAC Trainer - Todos los temas</title>
+  <style>
+    :root{--bg:#f3f6fb;--card:#ffffff;--text:#0f172a;--muted:#475569;--line:#dbe3ef;--accent:#1d4ed8;--accent-soft:#dbeafe;--good:#166534;--good-soft:#dcfce7;--bad:#b91c1c;--bad-soft:#fee2e2;--warn:#9a3412;--warn-soft:#ffedd5;--shadow:0 10px 28px rgba(15,23,42,.08);--radius:18px}
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eaf1fb 0%,#f8fafc 180px,#f3f6fb 100%);color:var(--text)}
+    .wrap{max-width:1280px;margin:0 auto;padding:20px 16px 40px}.hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;border-radius:24px;padding:22px 20px;box-shadow:var(--shadow)}.hero h1{margin:0 0 8px;font-size:28px}.hero p{margin:0;color:#dbeafe;line-height:1.45}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px;align-items:start}.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.panel{padding:16px;position:sticky;top:16px}.panel h2{margin:0 0 12px;font-size:19px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.topics{display:grid;gap:8px;margin-bottom:14px;max-height:280px;overflow:auto;padding-right:2px}
+    button,.file-label{border:none;background:#e2e8f0;color:var(--text);border-radius:12px;padding:11px 14px;font-size:14px;cursor:pointer;transition:.18s ease} button:hover,.file-label:hover{transform:translateY(-1px)} button.primary{background:var(--accent);color:#fff} button.ghost{background:#f8fafc;border:1px solid var(--line)} button.warn{background:#ea580c;color:#fff} button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .topic-btn{width:100%;text-align:left}.small{font-size:13px;color:var(--muted);line-height:1.45}.metric{border:1px solid var(--line);background:#f8fafc;border-radius:14px;padding:10px 12px;margin-bottom:10px}.metric strong{display:block;font-size:24px;margin-top:2px}.card{padding:20px}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:#1e40af;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700}.question-meta{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px;align-items:center}.question{font-size:28px;line-height:1.3;margin:10px 0 18px}.options{display:grid;gap:12px}
+    .option{width:100%;text-align:left;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fff;font-size:17px;line-height:1.35;min-height:64px}.option span.letter{display:inline-flex;width:30px;height:30px;justify-content:center;align-items:center;border-radius:999px;margin-right:10px;background:#eff6ff;color:#1d4ed8;font-weight:700;flex:0 0 auto}.option.correct{background:var(--good-soft);border-color:#86efac;color:#14532d}.option.incorrect{background:var(--bad-soft);border-color:#fecaca;color:#7f1d1d}.option.dim{opacity:.55}.option.placeholder{color:transparent;background:#fff;border-color:var(--line)}.option.placeholder .letter{visibility:hidden}
+    .result{margin-top:16px;padding:14px 16px;border-radius:14px;line-height:1.45;display:none}.result.show{display:block}.result.good{background:var(--good-soft);color:#14532d;border:1px solid #86efac}.result.bad{background:var(--bad-soft);color:#7f1d1d;border:1px solid #fca5a5}.result.info{background:var(--warn-soft);color:#9a3412;border:1px solid #fdba74}
+    .footer-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.45}#importFile{display:none}.progress{width:100%;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 16px}.progress>div{height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#16a34a);transition:width .25s ease}.mode-pill{border-radius:999px;padding:9px 12px;background:#eef2ff;font-size:13px;font-weight:700;color:#3730a3}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.panel{position:static}.question{font-size:22px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>ATP DGAC Trainer - Todos los temas</h1>
+    <p>Mismo sistema de memorización, práctica, falladas y eliminación de incorrectas, ahora con los 8 balotarios en una sola app.</p>
+  </section>
+  <div class="grid">
+    <aside class="panel">
+      <h2>Temas</h2>
+      <div class="topics" id="topicsList"></div>
+      <h2>Controles</h2>
+      <div class="row">
+        <button class="primary" id="modeMemBtn">Memorización</button>
+        <button class="ghost" id="modePracticeBtn">Práctica</button>
+        <button class="ghost" id="modeWrongBtn">Falladas</button>
+      </div>
+      <div class="row">
+        <button id="showAnswerBtn">Mostrar correcta</button>
+        <button id="eliminateBtn" class="ghost">Eliminar incorrectas</button>
+        <button id="prevBtn">Anterior</button>
+        <button id="nextBtn" class="primary">Siguiente</button>
+      </div>
+      <div class="row">
+        <button id="shuffleBtn">Mezclar</button>
+        <button id="resetProgressBtn" class="warn">Reset progreso</button>
+      </div>
+      <div class="row">
+        <label class="file-label" for="importFile">Importar progreso</label>
+        <input id="importFile" type="file" accept="application/json" />
+        <button id="exportBtn">Exportar progreso</button>
+      </div>
+      <div class="metric">Tema actual<strong id="topicTitle">-</strong></div>
+      <div class="metric">Contador<strong id="questionCounter">Pregunta 1 de 1</strong><div class="small">Posición actual dentro del tema</div></div>
+      <div class="metric">Preguntas<strong id="totalQuestions">-</strong><div class="small">Del tema seleccionado</div></div>
+      <div class="metric">Dominadas<strong id="masteredCount">-</strong><div class="small">Respondidas correctas</div></div>
+      <div class="metric">Falladas<strong id="wrongCount">-</strong><div class="small">Pendientes de repaso</div></div>
+      <div class="small">Progreso del set actual</div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="footer-note">Cada tema conserva su propio progreso en este dispositivo.</div>
+    </aside>
+    <main class="card">
+      <div class="question-meta">
+        <span class="badge" id="questionId">PREG...</span>
+        <span class="mode-pill" id="currentModeLabel">Modo: Memorización</span>
+      </div>
+      <div class="question" id="questionText">Cargando preguntas...</div>
+      <div class="options" id="options"></div>
+      <div class="result" id="resultBox"></div>
+    </main>
+  </div>
+</div>
+<script>
+const STORAGE_KEY='atp-dgac-all-topics-progress-v1';
+let topicsData={}; let topicKeys=[]; let selectedTopic='chap01'; let questions=[]; let currentPool=[]; let currentIndex=0; let mode='memorization'; let allProgress={}; let progress={answeredCorrect:{},wrongIds:{},seenIds:{}}; let currentAnswerShown=false; let currentSelectionLocked=false; let eliminatedThisQuestion=false;
+const els={topicsList:document.getElementById('topicsList'),topicTitle:document.getElementById('topicTitle'),questionCounter:document.getElementById('questionCounter'),totalQuestions:document.getElementById('totalQuestions'),masteredCount:document.getElementById('masteredCount'),wrongCount:document.getElementById('wrongCount'),progressBar:document.getElementById('progressBar'),questionId:document.getElementById('questionId'),currentModeLabel:document.getElementById('currentModeLabel'),questionText:document.getElementById('questionText'),options:document.getElementById('options'),resultBox:document.getElementById('resultBox'),modeMemBtn:document.getElementById('modeMemBtn'),modePracticeBtn:document.getElementById('modePracticeBtn'),modeWrongBtn:document.getElementById('modeWrongBtn'),showAnswerBtn:document.getElementById('showAnswerBtn'),eliminateBtn:document.getElementById('eliminateBtn'),prevBtn:document.getElementById('prevBtn'),nextBtn:document.getElementById('nextBtn'),shuffleBtn:document.getElementById('shuffleBtn'),exportBtn:document.getElementById('exportBtn'),importFile:document.getElementById('importFile'),resetProgressBtn:document.getElementById('resetProgressBtn')};
+function shuffle(array){const arr=[...array]; for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr;}
+function loadAllProgress(){try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) allProgress=JSON.parse(raw)||{};}catch(e){console.warn('No se pudo leer progreso',e); allProgress={};}}
+function syncTopicProgress(){progress=allProgress[selectedTopic] || {answeredCorrect:{},wrongIds:{},seenIds:{}};}
+function saveProgress(){allProgress[selectedTopic]=progress; localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress)); updateStats();}
+function updateStats(){const total=questions.length, mastered=Object.keys(progress.answeredCorrect||{}).length, wrong=Object.keys(progress.wrongIds||{}).length; els.totalQuestions.textContent=total; els.masteredCount.textContent=mastered; els.wrongCount.textContent=wrong; const currentTotal=currentPool.length||1; const pct=Math.min(100,((currentIndex+1)/currentTotal)*100); els.progressBar.style.width=pct+'%'; els.questionCounter.textContent=`Pregunta ${Math.min(currentIndex+1,currentTotal)} de ${currentTotal}`; const meta=topicsData[selectedTopic]; els.topicTitle.textContent=meta.title;}
+function updateControlVisibility(){if(mode==='practice'){els.eliminateBtn.style.display='inline-flex'; els.eliminateBtn.disabled=currentSelectionLocked||currentAnswerShown||eliminatedThisQuestion;} else {els.eliminateBtn.style.display='none';}}
+function showMessage(type,text){els.resultBox.className=`result show ${type}`; els.resultBox.innerHTML=text;}
+function clearMessage(){els.resultBox.className='result'; els.resultBox.innerHTML='';}
+function setMode(nextMode){mode=nextMode; els.modeMemBtn.className=nextMode==='memorization'?'primary':'ghost'; els.modePracticeBtn.className=nextMode==='practice'?'primary':'ghost'; els.modeWrongBtn.className=nextMode==='wrong'?'primary':'ghost'; els.currentModeLabel.textContent={memorization:'Modo: Memorización',practice:'Modo: Práctica',wrong:'Modo: Falladas'}[nextMode]; if(nextMode==='memorization'){els.shuffleBtn.disabled=true; els.shuffleBtn.style.display='none';} else {els.shuffleBtn.disabled=false; els.shuffleBtn.style.display='inline-flex';} rebuildPool(); currentIndex=0; renderQuestion();}
+function rebuildPool(){if(mode==='wrong'){const wrongIds=new Set(Object.keys(progress.wrongIds||{})); currentPool=questions.filter(q=>wrongIds.has(q.id)); if(currentPool.length===0) currentPool=[];} else {currentPool=[...questions];} if(mode==='memorization'){currentPool.sort((a,b)=>(a.order??0)-(b.order??0));} updateStats();}
+function renderTopicsList(){els.topicsList.innerHTML=''; topicKeys.forEach(key=>{const meta=topicsData[key]; const btn=document.createElement('button'); btn.className='topic-btn '+(key===selectedTopic?'primary':'ghost'); btn.innerHTML=`Cap. ${meta.chapter} - ${meta.title}`; btn.addEventListener('click',()=>selectTopic(key)); els.topicsList.appendChild(btn);});}
+function selectTopic(key){selectedTopic=key; questions=topicsData[key].questions || []; syncTopicProgress(); renderTopicsList(); rebuildPool(); currentIndex=0; renderQuestion();}
+function renderQuestion(){clearMessage(); currentAnswerShown=false; currentSelectionLocked=false; eliminatedThisQuestion=false; if(currentPool.length===0){els.questionId.textContent='Sin preguntas'; els.questionText.textContent=mode==='wrong'?'No tienes preguntas falladas en este tema.':'No hay preguntas disponibles.'; els.options.innerHTML=''; updateStats(); updateControlVisibility(); return;} const q=currentPool[currentIndex]; progress.seenIds[q.id]=true; saveProgress(); els.questionId.textContent=q.id; els.questionText.textContent=q.question; els.options.innerHTML=''; if(mode==='memorization'){const answer=document.createElement('div'); answer.className='option'; answer.innerHTML=`<span class="letter">${['A','B','C'][q.correctIndex]}</span>${q.options[q.correctIndex]}`; els.options.appendChild(answer);} else {q.options.forEach((opt,index)=>{const btn=document.createElement('button'); btn.className='option'; btn.innerHTML=`<span class="letter">${['A','B','C'][index]}</span>${opt}`; btn.dataset.index=index; btn.addEventListener('click',()=>answerQuestion(index)); els.options.appendChild(btn);});} updateStats(); updateControlVisibility();}
+function markCorrect(q){progress.answeredCorrect[q.id]=true; delete progress.wrongIds[q.id]; saveProgress();}
+function markWrong(q){progress.wrongIds[q.id]=true; saveProgress();}
+function answerQuestion(index){if(currentSelectionLocked) return; const q=currentPool[currentIndex]; const buttons=[...els.options.querySelectorAll('.option')]; currentSelectionLocked=true; currentAnswerShown=true; buttons.forEach((btn,i)=>{if(i===q.correctIndex) btn.classList.add('correct'); if(i===index && i!==q.correctIndex) btn.classList.add('incorrect'); btn.disabled=true;}); if(index===q.correctIndex){markCorrect(q); showMessage('good','Correcto. Esta pregunta queda marcada como dominada.');} else {markWrong(q); showMessage('bad',`Incorrecto. La correcta es <strong>${['A','B','C'][q.correctIndex]}</strong>: ${q.options[q.correctIndex]}`);} updateControlVisibility();}
+function eliminateIncorrect(){if(mode!=='practice'||currentPool.length===0||currentSelectionLocked||currentAnswerShown||eliminatedThisQuestion) return; const q=currentPool[currentIndex]; const buttons=[...els.options.querySelectorAll('.option')]; buttons.forEach((btn,i)=>{if(i!==q.correctIndex){btn.classList.add('placeholder'); btn.disabled=true; btn.innerHTML='&nbsp;';} else {btn.classList.add('correct');}}); eliminatedThisQuestion=true; markWrong(q); showMessage('info',`Se eliminaron las incorrectas manteniendo su espacio. Queda visible solo la correcta: <strong>${['A','B','C'][q.correctIndex]}</strong> - ${q.options[q.correctIndex]}. Esta pregunta quedó marcada como fallada para repaso.`); updateControlVisibility();}
+function showCorrectAnswer(){if(currentPool.length===0) return; const q=currentPool[currentIndex]; const buttons=[...els.options.querySelectorAll('.option')]; if(mode==='memorization'){showMessage('info','En memorización ya estás viendo la correcta.'); return;} currentAnswerShown=true; currentSelectionLocked=true; markWrong(q); buttons.forEach((btn,i)=>{if(i===q.correctIndex){btn.classList.add('correct');} else {btn.classList.add('dim');} btn.disabled=true;}); showMessage('info',`Se mostró la correcta y esta pregunta quedó en la lista de falladas para repaso: <strong>${['A','B','C'][q.correctIndex]}</strong> - ${q.options[q.correctIndex]}`); updateControlVisibility();}
+function previousQuestion(){if(currentPool.length===0) return; currentIndex=(currentIndex-1+currentPool.length)%currentPool.length; renderQuestion();}
+function nextQuestion(){if(currentPool.length===0) return; currentIndex=(currentIndex+1)%currentPool.length; renderQuestion();}
+function exportProgress(){const payload={exportedAt:new Date().toISOString(),selectedTopic,allProgress}; const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='atp-dgac-all-topics-progress.json'; a.click(); URL.revokeObjectURL(url);}
+function importProgressFile(file){const reader=new FileReader(); reader.onload=()=>{try{const parsed=JSON.parse(reader.result); allProgress=parsed.allProgress || parsed; syncTopicProgress(); saveProgress(); rebuildPool(); currentIndex=0; renderQuestion(); showMessage('good','Progreso importado correctamente.');}catch(err){showMessage('bad','No se pudo importar el archivo JSON.');}}; reader.readAsText(file);}
+function resetProgress(){if(!confirm('¿Seguro que quieres borrar el progreso local del tema actual?')) return; progress={answeredCorrect:{},wrongIds:{},seenIds:{}}; saveProgress(); rebuildPool(); currentIndex=0; renderQuestion();}
+async function loadQuestions(){const res=await fetch('./data/all_topics.json'); topicsData=await res.json(); topicKeys=Object.keys(topicsData).sort(); loadAllProgress(); questions=topicsData[selectedTopic].questions||[]; syncTopicProgress(); renderTopicsList(); rebuildPool(); renderQuestion();}
+els.modeMemBtn.addEventListener('click',()=>setMode('memorization')); els.modePracticeBtn.addEventListener('click',()=>setMode('practice')); els.modeWrongBtn.addEventListener('click',()=>setMode('wrong')); els.showAnswerBtn.addEventListener('click',showCorrectAnswer); els.eliminateBtn.addEventListener('click',eliminateIncorrect); els.prevBtn.addEventListener('click',previousQuestion); els.nextBtn.addEventListener('click',nextQuestion); els.shuffleBtn.addEventListener('click',()=>{if(mode==='memorization'){showMessage('info','En memorización el orden permanece igual al del balotario.'); return;} currentPool=shuffle(currentPool); currentIndex=0; renderQuestion();}); els.exportBtn.addEventListener('click',exportProgress); els.importFile.addEventListener('change',(e)=>{const file=e.target.files?.[0]; if(file) importProgressFile(file);}); els.resetProgressBtn.addEventListener('click',resetProgress); loadQuestions();
+</script>
+</body>
+</html>
